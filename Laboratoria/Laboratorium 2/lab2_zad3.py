@@ -5,7 +5,7 @@ from glfw.GLFW import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-
+import random
 
 def startup():
     update_viewport(None, 400, 400)
@@ -17,23 +17,57 @@ def shutdown():
 
 
 def render(time):
-    glClear(GL_COLOR_BUFFER_BIT)
+    glClear(GL_COLOR_BUFFER_BIT)  # START
 
-    glColor3f(0.0, 1.0, 0.0)
+    # SEED DLA RANDOM()
+    random.seed(33345)
+    drawRectangle( 0, 0, 50, 50)    # FUNKCJA - PROSTOKAT Z DWOCH TROJKATOW
+
+    glFlush()               # KONIEC
+
+# FUNKCJA W.W.
+def drawRectangle(x, y, a, b,d=1.0):
+
+    # (x,y) - SRODEK prostokata
+    # a - Dlugosc
+    # b - Wysokosc
+    # d - Stopien deformacji (domyslnie 0.0)
+
+    # DEFORMACJA
+    a = a * (1.0 + random.uniform(-d, d))
+    b = b * (1.0 + random.uniform(-d, d))
+
+    # KOLORY
+    c1 = (random.random(), random.random(), random.random())  # lewy dolny
+    c2 = (random.random(), random.random(), random.random())  # prawy dolny
+    c3 = (random.random(), random.random(), random.random())  # prawy gorny
+    c4 = (random.random(), random.random(), random.random())  # lewy gorny
+
+    # TROJKAT 1
     glBegin(GL_TRIANGLES)
-    glVertex2f(0.0, 0.0)
-    glVertex2f(0.0, 50.0)
-    glVertex2f(50.0, 0.0)
+    # LEWY DOLNY
+    glColor3f(*c1)
+    glVertex2f(x-a/2.0, y-b/2.0)
+    # PRAWY DOLNY
+    glColor3f(*c2)
+    glVertex2f(x+a/2.0, y-b/2.0)
+    # PRAWY GORNY
+    glColor3f(*c3)
+    glVertex2f(x+a/2.0, y+b/2.0)
     glEnd()
 
-    glColor3f(1.0, 0.0, 0.0)
+    # TROJKAT 2
     glBegin(GL_TRIANGLES)
-    glVertex2f(0.0, 0.0)
-    glVertex2f(0.0, 50.0)
-    glVertex2f(-50.0, 0.0)
+    # LEWY DOLNY
+    glColor3f(*c1)
+    glVertex2f(x-a/2.0, y-b/2.0)
+    # LEWY GORNY
+    glColor3f(*c4)
+    glVertex2f(x-a/2.0, y+b/2.0)
+    # PRAWY GORNY
+    glColor3f(*c3)
+    glVertex2f(x+a/2.0, y+b/2.0)
     glEnd()
-
-    glFlush()
 
 
 def update_viewport(window, width, height):
